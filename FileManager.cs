@@ -20,6 +20,7 @@
 
                     for(int i = 0; i < 7; i++)
                     {
+
                         if(i < 6)
                             Console.WriteLine($"{headers[i]}: {lineArray[i]}");
                         else
@@ -94,6 +95,19 @@
 
 
             sw.Close();
+        }
+    }
+
+    public static class TicketManager
+    {
+        static string readTicket(string headerData, string ticketData, int fieldIndex)
+        {
+
+        }
+
+        static string writeTicket()
+        {
+
         }
     }
 }

@@ -10,14 +10,13 @@
                 StreamReader sr = new StreamReader(filename);
 
                 //Skip the header line
+                //Instead of discarding it, parse it to use in formatting output.
                 var headers = sr.ReadLine().Split(',');
 
                 //Read the file out to console.
                 while (!sr.EndOfStream)
                 {
-                    var line = sr.ReadLine();
-
-                    var lineArray = line.Split(',');
+                    var lineArray = sr.ReadLine().Split(',');
 
                     for(int i = 0; i < 7; i++)
                     {
@@ -39,10 +38,10 @@
                                 }
                             }
                         }
-                        
                         Console.WriteLine();
                     }
                 }
+                sr.Close();
             }else
             {
                 Console.WriteLine($"{filename} does not exist");

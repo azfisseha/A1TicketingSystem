@@ -1,113 +1,92 @@
 ﻿namespace A1TicketingSystem
 {
+
+    /// <summary>
+    /// An object that handles file input and output for the ticketing system.
+    /// 
+    /// Uses <see cref="TicketHandler"/>
+    /// </summary>
     public class FileManager
     {
-        
+
+        private TicketHandler th = new TicketHandler();
+
+        /// <summary>
+        /// Opens a given filename and reads the ticket data within to the console.
+        /// </summary>
+        /// <param name="filename"></param>
         public void read(string filename)
         {
+            Console.WriteLine("___________");
+
             if (File.Exists(filename))
             {
                 StreamReader sr = new StreamReader(filename);
 
                 //Skip the header line
                 //Instead of discarding it, parse it to use in formatting output.
-                var headers = sr.ReadLine().Split(',');
+                string[] headers = sr.ReadLine().Split(',');
 
-                //Read the file out to console.
+                //Read the file out to console, line by line.
                 while (!sr.EndOfStream)
                 {
-                    var lineArray = sr.ReadLine().Split(',');
-
-                    for(int i = 0; i < 7; i++)
-                    {
-
-                        if(i < 6)
-                            Console.WriteLine($"{headers[i]}: {lineArray[i]}");
-                        else
-                        {
-                            var watchers = lineArray[i].Split('|');
-                            Console.Write($"{headers[i]}: ");
-                            for(int x = 0; x < watchers.Length; x++)
-                            {
-                                if (x < watchers.Length - 2)
-                                {
-                                    Console.Write(watchers[x] + ", ");
-                                }
-                                else
-                                {
-                                    Console.WriteLine(watchers[x]);
-                                }
-                            }
-                        }
-                        Console.WriteLine();
-                    }
+                    th.readTicket(headers, sr.ReadLine().Split(','));
                 }
                 sr.Close();
             }else
             {
-                Console.WriteLine($"{filename} does not exist");
+                Console.WriteLine($"{filename} does not exist\n");
             }
 
         }
 
+        /// <summary>
+        /// Writes out to a file with the given filename and writes user-submitted ticket data to it.
+        /// In the event the file already exists, confirms with user whether they wish to append, overwrite, or neither.
+        /// </summary>
+        /// <param name="filename"></param>
         public void create(string filename)
         {
-            StreamWriter sw = new StreamWriter(filename);
-            sw.WriteLine("TicketID,Summary,Status,Priority,Submitter,Assigned,Watching");
+            Console.WriteLine("___________");
+            var append = false;
+            if (File.Exists(filename))
+            {
+                //Confirm if the user intends to overwrite the file that exists or just add tickets to it.
+               
+                char menu;
+                do
+                {
+                    Console.WriteLine("1. Append to existing file.\n2. Overwrite existing file.\n3. Return to Main Menu.\n___________");
+                    menu = Console.ReadLine().ToUpper()[0];
+                    switch (menu)
+                    {
+                        case '1':
+                            append = true;
+                            break;
+                        case '2':
+                            append = false;
+                            break;
+                        case '3':
+                            Console.WriteLine("Returning to Main Menu...\n");
+                            return;
+                    }
+                } while (menu != '1' && menu != '2' && menu != '3');
+            }
+            StreamWriter sw = new StreamWriter(filename, append);
 
-            string addAnother;
+            //Write the header line if this is a new file.
+            if(!append) sw.WriteLine("TicketID,Summary,Status,Priority,Submitter,Assigned,Watching");
+
+            //Collect ticket information and write to file.
+            char addAnother;
             do
             {
-                var line = "";
-                Console.Write("Ticket ID: ");
-                line = Console.ReadLine() + ",";
-
-                Console.Write("Summary: ");
-                line += Console.ReadLine() + ",";
-
-                Console.Write("Status: ");
-                line += Console.ReadLine() + ",";
-
-                Console.Write("Priority: ");
-                line += Console.ReadLine() + ",";
-
-                Console.Write("Submitter: ");
-                line += Console.ReadLine() + ",";
-
-                Console.Write("Assigned: ");
-                line += Console.ReadLine() + ",";
-
-                Console.Write("How many are watching?: ");
-                var watchers = Int32.Parse(Console.ReadLine());
-
-                for(int i = 0; i < watchers; i++)
-                {
-                    Console.Write($"Watcher #{i+1}: ");
-                    line += Console.ReadLine();
-                    if (i < watchers) line += "|";
-                }
-
-                sw.WriteLine(line);
-
-                Console.WriteLine("Add another ticket? (Y/N)");
-                addAnother = Console.ReadLine().ToUpper();
-            } while (addAnother == "Y");
-
+                sw.WriteLine(th.buildTicket());
+                Console.WriteLine("Add another ticket? (Y)es/(N)o");
+                addAnother = Console.ReadLine().ToUpper()[0];
+            } while (addAnother == 'Y');
 
             sw.Close();
-        }
-    }
-
-    public static class TicketManager
-    {
-        static string readTicket(string headerData, string ticketData, int fieldIndex)
-        {
-
-        }
-
-        static string writeTicket()
-        {
-
         }
     }
 }

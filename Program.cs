@@ -5,28 +5,31 @@
         public static void Main()
         {
             string menu;
-            string filename = "tickets.csv";
+
+            Console.WriteLine("Ticketing System\n___________");
 
             FileManager fileManager = new FileManager();
             do
             {
-                Console.WriteLine("1. Read data from file.");
-                Console.WriteLine("2. Create file from data.");
-                Console.WriteLine("3. Exit.");
+                Console.WriteLine("1. Read data from file.\n2. Create file from data.\n3. Exit.\n___________");
                 menu = Console.ReadLine();
+                Console.WriteLine();
 
                 //Option 1: Read data from file.
-                if(menu == "1")
+                if (menu == "1")
                 {
-                    fileManager.read(filename);   
+                    Console.WriteLine("Enter Filename:\n___________");
+                    fileManager.read(Console.ReadLine());   
                 }
 
                 //Option 2: Create file from data.
                 else if(menu == "2")
                 {
-                    fileManager.create(filename);
+                    Console.WriteLine("Enter Filename:\n___________");
+                    fileManager.create(Console.ReadLine());
                 }
             } while (menu != "3");
+            Console.WriteLine("Exiting...");
         }
     
     }

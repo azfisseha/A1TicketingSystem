@@ -9,7 +9,7 @@
     public class FileManager
     {
 
-        private TicketHandler th = new TicketHandler();
+        private TicketHandler ticketHandler = new TicketHandler();
 
         /// <summary>
         /// Opens a given filename and reads the ticket data within to the console.
@@ -30,13 +30,14 @@
                 //Read the file out to console, line by line.
                 while (!sr.EndOfStream)
                 {
-                    th.readTicket(headers, sr.ReadLine().Split(','));
+                    ticketHandler.readTicket(headers, sr.ReadLine().Split(','));
                 }
                 sr.Close();
             }else
             {
                 Console.WriteLine($"{filename} does not exist\n");
             }
+            Console.WriteLine("___________");
 
         }
 
@@ -81,9 +82,10 @@
             char addAnother;
             do
             {
-                sw.WriteLine(th.buildTicket());
+                sw.WriteLine(ticketHandler.buildTicket());
                 Console.WriteLine("Add another ticket? (Y)es/(N)o");
                 addAnother = Console.ReadLine().ToUpper()[0];
+                Console.WriteLine("___________");
             } while (addAnother == 'Y');
 
             sw.Close();

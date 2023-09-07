@@ -23,7 +23,7 @@
                     Console.Write($"{headerData[i]} | ");
                     for (int x = 0; x < watchers.Length; x++)
                     {
-                        if (x < watchers.Length - 2)
+                        if (x < watchers.Length - 1)
                         {
                             Console.Write(watchers[x] + ", ");
                         }
@@ -69,7 +69,10 @@
             {
                 Console.Write($"Watcher #{i + 1}: ");
                 line += Console.ReadLine();
-                if (i < watchers) line += "|";
+                if (i < watchers - 1)
+                {
+                    line += "|";
+                }
             }
 
             return line;
